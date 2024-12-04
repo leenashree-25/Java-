@@ -1,0 +1,225 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+
+class Restaurant {
+    String name;
+    String cuisine;
+    String location;
+    int distance; // in kilometers
+
+    public Restaurant(String name, String cuisine, String location, int distance) {
+        this.name = name;
+        this.cuisine = cuisine;
+        this.location = location;
+        this.distance = distance;
+    }
+
+    @Override
+    public String toString() {
+        return name + " - " + cuisine + " - " + location + " - " + distance + "km away";
+    }
+}
+
+public class CityGuideApp extends Frame implements ActionListener {
+    // Restaurant data
+    List<Restaurant> restaurants;
+
+    // UI Components
+    Label titleLabel, cuisineLabel, distanceLabel, resultLabel;
+    TextField distanceInput;
+    Choice cuisineChoice;
+    Button searchButton, clearButton, showAllButton;
+    TextArea resultArea;
+
+    public CityGuideApp() {
+        // Initialize restaurant data
+        restaurants = new ArrayList<>();
+        populateRestaurants();
+
+        // Set up the GUI layout
+        setLayout(new GridBagLayout());
+        setTitle("City Guide Application");
+        setSize(600, 600);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Title
+        titleLabel = new Label("City Guide - Find Restaurants!");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setAlignment(Label.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        add(titleLabel, gbc);
+
+        // Cuisine label and dropdown
+        cuisineLabel = new Label("Select Cuisine:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        add(cuisineLabel, gbc);
+
+        cuisineChoice = new Choice();
+        cuisineChoice.add("All");
+        cuisineChoice.add("Indian");
+        cuisineChoice.add("Chinese");
+        cuisineChoice.add("Italian");
+        cuisineChoice.add("Mexican");
+        cuisineChoice.add("Thai");
+        cuisineChoice.add("Japanese");
+        cuisineChoice.add("American");
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        add(cuisineChoice, gbc);
+
+        // Distance label and input
+        distanceLabel = new Label("Enter Max Distance (km):");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        add(distanceLabel, gbc);
+
+        distanceInput = new TextField(10);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        add(distanceInput, gbc);
+
+        // Buttons: Search, Show All, Clear
+        searchButton = new Button("Search");
+        searchButton.addActionListener(this);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        add(searchButton, gbc);
+
+        showAllButton = new Button("Show All");
+        showAllButton.addActionListener(this);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        add(showAllButton, gbc);
+
+        clearButton = new Button("Clear");
+        clearButton.addActionListener(this);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        add(clearButton, gbc);
+
+        // Results label and text area
+        resultLabel = new Label("Results:");
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
+        add(resultLabel, gbc);
+
+        resultArea = new TextArea(15, 50);
+        resultArea.setEditable(false);
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        add(resultArea, gbc);
+
+        // Window close operation
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose();
+            }
+        });
+    }
+
+    // Populate restaurant data
+    public void populateRestaurants() {
+        restaurants.add(new Restaurant("Spice Garden", "Indian", "Downtown", 5));
+        restaurants.add(new Restaurant("Dragon Bowl", "Chinese", "Midtown", 3));
+        restaurants.add(new Restaurant("Pizza Palace", "Italian", "Uptown", 8));
+        restaurants.add(new Restaurant("Taco Fiesta", "Mexican", "Downtown", 4));
+        restaurants.add(new Restaurant("Curry House", "Indian", "Midtown", 6));
+        restaurants.add(new Restaurant("Noodle Haven", "Chinese", "Eastside", 7));
+        restaurants.add(new Restaurant("La Trattoria", "Italian", "Westside", 12));
+        restaurants.add(new Restaurant("BBQ Bliss", "American", "Midtown", 10));
+        restaurants.add(new Restaurant("Sushi World", "Japanese", "Downtown", 9));
+        restaurants.add(new Restaurant("Thai Spice", "Thai", "Eastside", 4));
+        restaurants.add(new Restaurant("The Curry Leaf", "Indian", "Southside", 3));
+        restaurants.add(new Restaurant("Panda Palace", "Chinese", "Northside", 5));
+        restaurants.add(new Restaurant("Mama Mia", "Italian", "Uptown", 6));
+        restaurants.add(new Restaurant("Burrito Binge", "Mexican", "Midtown", 7));
+        restaurants.add(new Restaurant("Grill Station", "American", "Westside", 11));
+        restaurants.add(new Restaurant("Tokyo Delights", "Japanese", "Northside", 8));
+        restaurants.add(new Restaurant("Pad Thai Corner", "Thai", "Downtown", 6));
+        restaurants.add(new Restaurant("Flavors of India", "Indian", "Eastside", 4));
+        restaurants.add(new Restaurant("Wok & Roll", "Chinese", "Midtown", 3));
+        restaurants.add(new Restaurant("Pasta Perfection", "Italian", "Southside", 10));
+        restaurants.add(new Restaurant("Tortilla Town", "Mexican", "Northside", 8));
+        restaurants.add(new Restaurant("Burger Barn", "American", "Downtown", 4));
+        restaurants.add(new Restaurant("Sakura Sushi", "Japanese", "Uptown", 9));
+        restaurants.add(new Restaurant("Green Basil", "Thai", "Westside", 5));
+        restaurants.add(new Restaurant("Roti Junction", "Indian", "Downtown", 7));
+        restaurants.add(new Restaurant("Chow Mein Cafe", "Chinese", "Southside", 6));
+        restaurants.add(new Restaurant("Romeo's Kitchen", "Italian", "Eastside", 5));
+        restaurants.add(new Restaurant("Fajita Fiesta", "Mexican", "Westside", 9));
+        restaurants.add(new Restaurant("Ribs & More", "American", "Southside", 11));
+    }
+
+    // Handle button actions
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == searchButton) {
+            searchRestaurants();
+        } else if (e.getSource() == showAllButton) {
+            showAllRestaurants();
+        } else if (e.getSource() == clearButton) {
+            clearResults();
+        }
+    }
+
+    // Search restaurants based on criteria
+    public void searchRestaurants() {
+        String selectedCuisine = cuisineChoice.getSelectedItem();
+        String distanceText = distanceInput.getText();
+        int maxDistance;
+
+        try {
+            maxDistance = Integer.parseInt(distanceText);
+        } catch (NumberFormatException ex) {
+            resultArea.setText("Invalid distance. Please enter a valid number.");
+            return;
+        }
+
+        StringBuilder results = new StringBuilder();
+        for (Restaurant restaurant : restaurants) {
+            if ((selectedCuisine.equals("All") || restaurant.cuisine.equals(selectedCuisine))
+                    && restaurant.distance <= maxDistance) {
+                results.append(restaurant.toString()).append("\n");
+            }
+        }
+
+        if (results.length() == 0) {
+            resultArea.setText("No restaurants found matching your criteria.");
+        } else {
+            resultArea.setText(results.toString());
+        }
+    }
+
+    // Show all restaurants
+    public void showAllRestaurants() {
+        StringBuilder results = new StringBuilder();
+        for (Restaurant restaurant : restaurants) {
+            results.append(restaurant.toString()).append("\n");
+        }
+        resultArea.setText(results.toString());
+    }
+
+    // Clear results and reset inputs
+    public void clearResults() {
+        cuisineChoice.select(0);
+        distanceInput.setText("");
+        resultArea.setText("");
+    }
+
+    // Main method to run the application
+    public static void main(String[] args) {
+        CityGuideApp app = new CityGuideApp();
+        app.setVisible(true);
+    }
+}
